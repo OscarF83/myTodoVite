@@ -1,9 +1,5 @@
 import "./style.css";
-
-const todoForm = document.querySelector<HTMLFormElement>("form");
-const divTodoList = document.querySelector<HTMLDivElement>("#todoList");
-const inputTodo = document.querySelector<HTMLInputElement>('[name="todo"]');
-const clearChecked = document.querySelector<HTMLButtonElement>('[name="clearChecked"]');
+import { elements } from "./functions/getElement";
 
 type TodoItem = {
   what: string;
@@ -21,9 +17,8 @@ function createTodoItem(task: string): TodoItem {
 }
 
 function render(list: TodoItem[]): void {
-  if (divTodoList != null) {
-    divTodoList.innerHTML = "";
-  }
+  elements.divTodoList.innerHTML = "";
+
   list.forEach(function (todoItem, index) {
     let todoCheckbox = document.createElement("input");
     todoCheckbox.type = "checkbox";
@@ -35,7 +30,7 @@ function render(list: TodoItem[]): void {
     const buttonClear = document.createElement("button");
     buttonClear.textContent = "Clear";
     div.append(todoCheckbox, todo, buttonClear);
-    divTodoList?.appendChild(div);
+    elements.divTodoList.appendChild(div);
 
     todoCheckbox.addEventListener("click", () => (todoItem.done = todoItem.done ? false : true));
     buttonClear.addEventListener("click", () => {
@@ -45,22 +40,16 @@ function render(list: TodoItem[]): void {
   });
 }
 
-if (todoForm != null && divTodoList != null && inputTodo != null && clearChecked != null) {
-  todoForm.onsubmit = (event) => {
-    event.preventDefault();
-    const value = inputTodo?.value || "vacio";
-    todoList.push(createTodoItem(value));
-    inputTodo.value = "";
+elements.todoForm.onsubmit = (event) => {
+  event.preventDefault();
+  const value = elements.inputTodo.value;
+  todoList.push(createTodoItem(value));
+  elements.inputTodo.value = "";
 
-    render(todoList);
-  };
-  clearChecked.addEventListener("click", () => {
-    const newTodoList = todoList.filter((item) => item.done == false);
-    todoList = newTodoList;
-    render(todoList);
-  });
-}
-
-//element.addEventListener("click", () => setCounter(counter + 1));
-//setCounter(0);
-// hola
+  render(todoList);
+};
+elements.clearChecked.addEventListener("click", () => {
+  const newTodoList = todoList.filter((item) => item.done == false);
+  todoList = newTodoList;
+  render(todoList);
+});
