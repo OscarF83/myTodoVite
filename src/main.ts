@@ -35,7 +35,8 @@ function render(list: TodoItem[]): void {
     todoCheckbox.addEventListener("click", () => (todoItem.done = todoItem.done ? false : true));
     buttonClear.addEventListener("click", () => {
       todoList.splice(index, 1);
-      render(todoList);
+      div.remove(); //Mejor que volver hacer un render, más eficiente
+      //render(todoList);
     });
   });
 }
